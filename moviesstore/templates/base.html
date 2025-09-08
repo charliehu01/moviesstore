@@ -10,11 +10,14 @@
         <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <style>
-            .footer-section {
-                position: fixed;
-                left: 0;
-                bottom: 0;
-                width: 100%;
+            body {
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            .body-content {
+                flex-grow: 1;
             }
         </style>
     </head>
@@ -57,13 +60,13 @@
         </nav>
         <!-- Header -->
 
-        <div>
+        <div class="body-content">
             {% block content %}
             {% endblock content %}
         </div>
 
         <!-- Footer -->
-        <div class="footer-section">
+        <div>
             <section class="p-3 ms-footer d-none d-md-block">
                 <div class="container">
                     <div class="row mt-3 text-white">
