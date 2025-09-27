@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Movie, Review
+from .models import Movie, Review, Petition, Signature
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -61,3 +61,46 @@ def delete_review(request, id, review_id):
     review = get_object_or_404(Review, id=review_id, user=request.user)
     review.delete()
     return redirect('movies.show', id=id)
+
+@login_required
+def petitions(request):
+    if request.method == 'POST':
+        petition = Petition()
+        petition.name = request.POST['name']
+        petition.likes = 0
+        petition.save()
+        return redirect('movies.petitions')
+
+    petitions = Petition.objects.all()
+
+    template_data = {}
+    template_data['title'] = 'Petitions'
+    template_data['petitions'] = petitions
+
+    return render(request, 'movies/petitions.html', {'template_data': template_data})
+
+@login_required
+def view_petition(request, id):
+    if request.method == 'POST':
+        petition = Petition.objects.get(id=id)
+        petition.likes = petition.likes + 1
+        petition.save()
+        signature = Signature()
+        signature.petition = petition
+        signature.signer = request.user
+        signature.save()
+        return redirect('movies.view_petition', id=id)
+
+    petition = Petition.objects.get(id=id)
+    hasSignature = False
+    signatures = Signature.objects.filter(petition=petition)
+    signatures = signatures.filter(signer=request.user)
+    if len(signatures) > 0:
+        hasSignature = True
+
+    template_data = {}
+    template_data['title'] = 'Petitions'
+    template_data['petition'] = petition
+    template_data['hasSignature'] = hasSignature
+
+    return render(request, 'movies/view_petition.html', {'template_data': template_data})

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="p-3">
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-md-6 mx-auto mb-3">
+                <h2>Petition for {{ template_data.petition.name }}</h2>
+                <hr />
+                {% if user.is_authenticated %}
+                <div class="container mt-4">
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="card shadow p-3 mb-4 rounded">
+                                {% if template_data.hasSignature %}
+                                <p>I would like to see {{ template_data.petition.name }} in the Movie Store.<p>
+                                <p>Likes: {{ template_data.petition.likes }}</p>
+                                <p>You already liked this petition!</p>
+                                {% else %}
+                                <form method="POST">
+                                    {% csrf_token %}
+                                    <p>I would like to see {{ template_data.petition.name }} in the Movie Store.<p>
+                                    <div>
+                                        Likes: {{ template_data.petition.likes }}
+                                    </div>
+                                    <button type="submit">Like</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -21,3 +21,18 @@ class Review(models.Model):
 
     def __str__(self):
         return str(self.id) + ' - ' + self.movie.name
+
+class Petition(models.Model):
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    likes = models.IntegerField()
+
+    def __str__(self):
+        return str(self.id) + ' - ' + self.name
+
+class Signature(models.Model):
+    petition = models.ForeignKey(Petition, on_delete=models.CASCADE)
+    signer = models.ForeignKey(User, on_delete=models.CASCADE)
+    
+    def __str__(self):
+        return str(self.signer.username) + ' signed ' + self.petition.name

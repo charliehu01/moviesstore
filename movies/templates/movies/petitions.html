@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+<div class="p-3">
+  <div class="container">
+    <div class="row mt-3">
+      <div class="col mx-auto mb-3">
+        <h2>Petitions</h2>
+        <hr />
+      </div>
+    </div>
+    <div class="row">
+        <div class="text-start">
+            <form method="POST">
+                {% csrf_token %}
+                <p>
+                    <label for="name">Add Petition for Movie:</label>
+                    <input
+                        type="text"
+                        name="name"
+                        required
+                        class="form-control"
+                        id="name"
+                    >
+                    </input>
+                </p>
+                <div class="text-center">
+                    <button
+                        type="submit"
+                        class="btn bg-dark text-white"
+                    >
+                        Create Petition
+                    </button>
+                </div>
+            </form>
+        </div>
+        
+        <p></p>
+        {% for petition in template_data.petitions %}
+        <div class="col-md-4 col-lg-3 mb-2">
+            <div class="p-2 card align-items-center pt-4">
+                <div class="card-body text-center">
+                    <a href="{% url 'movies.view_petition' id=petition.id %}">
+                        {{ petition.name }}
+                    </a>
+                    <hr>
+                    <p>
+                        Likes: {{ petition.likes }}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
